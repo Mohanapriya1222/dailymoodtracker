@@ -1,0 +1,87 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Mini Mood Tracker</title>
+         </head> 
+         <body>
+            <style>
+  body {
+    background: linear-gradient(160deg, #3D1A3A, #6B1E5C);
+    color: #FFF3F9;
+    font-family: sans-serif;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  button {
+    background: #ff5da349;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 6px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #FF9DC4;
+  }
+
+  #historyList {
+    list-style: none;
+    padding: 0;
+  }
+
+  #historyList li {
+    background: rgba(249, 1, 150, 0.178);
+    margin: 6px auto;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 300px;
+  }
+</style>
+             <h1>How are you feeling today?</h1> 
+             <button onclick="logMood(1)"> 😞 Bad</button> 
+             <button onclick="logMood(3)"> 😐 Okay</button>
+              <button onclick="logMood(5)"> 😄 Great</button> 
+
+              <textarea id="noteInput" placeholder="Write a note about today..." rows="2" style="width:250px; padding:8px; border-radius:8px; border:none;"></textarea>
+<br><br>
+              <p id="status"></p>
+               <h2>History</h2> 
+               <ul id="historyList"></ul>
+                <script>
+                 function getToday() { 
+                    return new Date().toISOString().split("T")[0]; // "2026-08-30" 
+                    // 
+                    } 
+                   function logMood(moodValue) {
+                    let today = getToday();
+                    let noteText = document.getElementById("noteInput").value;
+                    let entry = { date: today, mood: moodValue, note: noteText };
+
+                    localStorage.setItem("mood-" + today, JSON.stringify(entry));
+                    document.getElementById("status").textContent = "Saved! Mood: " + moodValue;
+                    renderHistory();
+}
+                          function renderHistory() {
+                             let list = document.getElementById("historyList");
+                              list.innerHTML = ""; // clear old list before redrawing  
+                              // 
+                              for(let i = 0; i < localStorage.length; i++) {
+                                 let key = localStorage.key(i); 
+                                 if (key.startsWith("mood-")) {
+                                     let entry = JSON.parse(localStorage.getItem(key)); 
+                                     let item = document.createElement("li");
+                                    item.textContent = entry.date + " — mood: " + entry.mood + " — " + entry.note;
+                                      list.appendChild(item);
+                                     }
+                                     } 
+                                    }
+                                      renderHistory(); 
+                                     // show history immediately when page loads
+                                     // 
+                                      </script>
+                                      </body>
+                                       </html>
